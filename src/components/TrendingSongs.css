@@ -1,0 +1,61 @@
+.song-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+  padding: 10px;
+  background-color: #1e1e2f;
+  border-radius: 10px;
+  width: 180px;
+  text-align: center;
+  color: #fff;
+  transition: transform 0.2s ease-in-out;
+}
+
+.song-card:hover {
+  transform: scale(1.05);
+}
+
+.song-image {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.song-info {
+  margin-top: 5px;
+}
+
+.song-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 2px 0;
+}
+
+.song-artist {
+  font-size: 12px;
+  color: #aaa;
+  margin: 0;
+}
+
+/* Row view - horizontal scroll */
+.row-view {
+  display: flex;
+  gap: 0rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  scrollbar-width: none;
+}
+
+.row-view::-webkit-scrollbar {
+  display: none;
+}
+
+/* Grid view - show all */
+.grid-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 2rem;
+}

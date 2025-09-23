@@ -1,0 +1,28 @@
+.sidebar {
+  width: 180px;
+  background: #000;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  position: fixed;
+  top: 60px;   /* start below header */
+  bottom: 0;
+  left: 0;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar nav ul li {
+  padding: 12px 0;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.sidebar nav ul li:hover {
+  color: #1db954;
+}

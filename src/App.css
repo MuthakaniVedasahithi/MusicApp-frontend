@@ -1,0 +1,85 @@
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: #312333;
+  color: white;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Main area */
+.main-content {
+  margin-left: 200px; /* leave space for sidebar */
+  padding: 80px 20px 20px; /* leave space for header */
+  flex: 1;
+  overflow-y: auto;
+}
+
+
+/* Content below header */
+.page-content {
+  flex: 1;
+  padding: 10px 20px;   /* reduce top padding (was probably 40px+) */
+  margin-top: 0;        /* remove extra margin */
+}
+
+
+/* Section */
+.section {
+  margin-bottom: 30px 0;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+.scroll-container,
+.artist-container {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.quote {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  font-style: italic;
+  margin-top: 5px;   /* reduced from 30px → closer to header */
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.sub-quote {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #aaa;
+  letter-spacing: 1px;
+  text-transform: italic;
+  margin-bottom: 5px;  /* small tweak for balance */
+}
+.section-header {
+  display: flex;
+  justify-content: space-between; /* Title left, button right */
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.toggle-link {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #aaa;         /* default grey text */
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.toggle-link:hover {
+  color: #1db954;      /* Spotify green on hover */
+  text-decoration: underline;
+}
+
+

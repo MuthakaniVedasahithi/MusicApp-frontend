@@ -1,0 +1,61 @@
+.artists-container {
+  padding: 20px 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.toggle-link {
+  color: #ccc;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+/* Common artist card styles */
+.artist-card {
+  text-align: center;
+  flex-shrink: 0;
+  width: 160px; /* Ensure card has enough width */
+}
+
+.artist-image {
+  width: 140px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid white;
+  display: block;
+  margin: 0 auto;
+}
+
+.artist-name {
+  margin-top: 0.5rem;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Row view - horizontal scroll */
+.artist-row {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  scrollbar-width: none;
+}
+
+.artist-row::-webkit-scrollbar {
+  display: none;
+}
+
+/* Grid view - show all */
+.artist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 2rem;
+}
