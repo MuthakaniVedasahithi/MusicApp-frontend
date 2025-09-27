@@ -1,0 +1,95 @@
+.movie-detail-container {
+  width: 100%;
+  min-height: 100vh;
+  color: white;
+}
+
+/* Movie Banner at Top */
+.movie-banner {
+  width: 100%;
+  height: 150px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.banner-overlay {
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.movie-title-detail {
+  font-size: 36px;
+  margin: 0;
+}
+
+.movie-director-detail {
+  font-size: 18px;
+  margin-top: 5px;
+}
+
+/* Songs List Section */
+.songs-list-container {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.song-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1e1e2f;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.song-info {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.song-title {
+  font-weight: bold;
+}
+
+.song-singer {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.song-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.song-duration {
+  font-size: 12px;
+  color: #ccc;
+}
+
+.song-actions button {
+  font-size: 24px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #fff;
+  transition: color 0.3s;
+}
+
+.song-actions button.heart.active {
+  color: red;
+}
+
+.song-actions button.play.active {
+  color: #1db954; /* green when playing */
+}
+
