@@ -1,0 +1,108 @@
+.create-playlist {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start;
+  color: #111;
+}
+
+.create-playlist h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.create-playlist input {
+  width: 300px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  transition: 0.2s ease-in-out;
+}
+
+.create-playlist input:focus {
+  border-color: #333;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.create-playlist button {
+  width: 180px;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.create-playlist button:hover {
+  background-color: #333;
+}
+
+/* ===========================
+   Professional Popup Styling
+   =========================== */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 25px 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  animation: fadeInOut 2.5s ease-in-out forwards;
+  min-width: 320px;
+}
+
+.popup-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.popup-icon {
+  font-size: 1.8rem;
+}
+
+.popup p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #222;
+}
+
+.popup.success {
+  border-left: 6px solid #4caf50;
+}
+
+.popup.warning {
+  border-left: 6px solid #ff9800;
+}
+
+/* Animation for smooth appearance and disappearance */
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.95);
+  }
+  10% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -52%) scale(0.95);
+  }
+}

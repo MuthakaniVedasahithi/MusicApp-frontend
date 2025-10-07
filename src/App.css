@@ -4,18 +4,12 @@
   width: 100vw;
   /* Replace solid background with animation */
   animation: colorShift 8s infinite alternate;
-  color: black;
+  background:#312333;
+  color: rgb(246, 244, 244);
   font-family: "Segoe UI", sans-serif;
 }
 
-/* Keep your existing keyframes */
-@keyframes colorShift {
-  0%   { background-color: #d3edd3; }  /* pale green */
-  25%  { background-color: #a38d8d; }  /* pale pink */
-  50%  { background-color: #c8c8e4; }  /* pale blue */
-  75%  { background-color: rgb(225, 184, 221) }  /* pale orange */
-  100% { background-color: #e5b5e0; }  /* back to pale green */
-}
+
 
 
 /* Main area */

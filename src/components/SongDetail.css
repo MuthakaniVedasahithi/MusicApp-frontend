@@ -1,0 +1,207 @@
+.song-detail-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  text-align: center;
+  padding: 20px;
+  background: #0e0e0e;
+  color: white;
+}
+
+/* Back button */
+.back-btn {
+  align-self: flex-start;
+  background: transparent;
+  border: none;
+  color: #bbb;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+/* --- Main Song Display --- */
+.song-detail-card {
+  background: transparent; /* ✅ No box */
+  padding: 0;
+  border: none;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.song-detail-card:hover {
+  transform: none; /* ✅ No hover zoom */
+}
+
+/* Image + Play button wrapper */
+.image-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.song-detail-img {
+  width: 250px; /* ✅ Decreased size */
+  height: 250px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+/* Play button overlay */
+.play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(163, 185, 21, 0.2);
+  border: 2px solid white;
+  color: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.play-btn:hover {
+  background: rgba(108, 21, 195, 0.4);
+}
+
+/* Song title and artist text */
+.song-detail-title {
+  margin-top: 20px;
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+.song-detail-artist {
+  font-size: 1.1rem;
+  color: #aaa;
+  margin-top: 5px;
+}
+
+/* Like and Add buttons */
+.song-actions {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.like-btn,
+.add-btn {
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.like-btn {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.add-btn {
+  background-color: #3a86ff;
+  color: white;
+}
+
+/* --- Remaining Songs Section --- */
+.similar-section {
+  margin-top: 50px;
+  width: 100%;
+  text-align: center;
+}
+
+.similar-section h2 {
+  margin-bottom: 20px;
+  color: #fff;
+  font-size: 1.6rem;
+}
+
+/* Grid of remaining songs */
+.similar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.similar-card {
+  background: transparent; /* ✅ No box */
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.similar-card:hover {
+  transform: scale(1.05);
+}
+
+.similar-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.similar-title {
+  color: #fff;
+  font-weight: bold;
+  margin: 10px 0 5px;
+}
+
+.similar-artist {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+/* --- Progress Bar --- */
+/* Draggable slider for progress */
+.progress-slider {
+  width: 250px;
+  margin-top: 15px;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.progress-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  background: #333;
+  border-radius: 5px;
+}
+
+.progress-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #3a86ff;
+  border: 2px solid white;
+  margin-top: -5px;
+  cursor: pointer;
+}
+
+.progress-slider::-moz-range-track {
+  height: 6px;
+  background: #333;
+  border-radius: 5px;
+}
+
+.progress-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #3a86ff;
+  border: 2px solid white;
+  cursor: pointer;
+}
+

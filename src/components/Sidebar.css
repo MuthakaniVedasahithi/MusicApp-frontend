@@ -23,6 +23,17 @@
   font-size: 1rem;
 }
 
+.sidebar nav ul li {
+  color: white;             /* white by default */
+  cursor: pointer;          /* pointer cursor */
+  transition: color 0.3s;
+}
+
 .sidebar nav ul li:hover {
-  color: #1db954;
+  color: #1db954;           /* green on hover */
+}
+
+.sidebar nav ul li a {
+  color: inherit;           /* inherit from li */
+  text-decoration: none;
 }

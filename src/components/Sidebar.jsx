@@ -8,14 +8,10 @@ const Sidebar = () => {
     <aside className="sidebar">
       <nav>
         <ul>
-          <li>
-            <Link to="/">Home</Link>
-            </li>
-          <li>Your Library</li>
-          <li>Create Playlist</li>
-          <li>
-            <Link to="/movies">Popular Movies</Link>
-            </li>
+          <li><Link to="/home">Home</Link></li>
+          <li><Link to="/library">Your Library</Link></li>
+          <li><Link to="/create-playlist">Create Playlist</Link></li>
+          <li><Link to="/movies">Popular Movies</Link></li>
         </ul>
       </nav>
     </aside>

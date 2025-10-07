@@ -1,0 +1,74 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  color: white;
+
+  /* Background image */
+  background: url('../assets/LSBackground.jpg') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed; /* optional: makes image fixed while scrolling */
+}
+
+.login-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.role-label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.role-select {
+  margin-left: 10px;
+  padding: 5px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login-form input {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+}
+
+.login-form button {
+  padding: 12px;
+  background-color: #1db954;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-form button:hover {
+  background-color: #17a84b;
+}
+
+.login-message {
+  margin-top: 15px;
+  color: #ffcccb;
+  font-size: 14px;
+}

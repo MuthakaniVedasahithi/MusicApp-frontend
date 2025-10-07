@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ import added
 import "./TrendingSongs.css";
 import song1 from "../assets/song1.jpg";
 import song2 from "../assets/song2.jpeg";
@@ -21,11 +22,12 @@ export const songs = [
   { id: 7, title: "Lose Yourself", artist: "Eminem", img: song7 },
   { id: 8, title: "Uptown Funk", artist: "Mark Ronson ft. Bruno Mars", img: song8 },
   { id: 9, title: "Let Her Go", artist: "Passenger", img: song9 },
-  { id: 10, title: "Havana", artist: "Camila Cabello", img: song10 }
+  { id: 10, title: "Havana", artist: "Camila Cabello", img: song10 },
 ];
 
 const TrendingSongs = () => {
   const [showAll, setShowAll] = useState(false);
+  const navigate = useNavigate(); // ✅
 
   return (
     <div className="section">
@@ -38,7 +40,11 @@ const TrendingSongs = () => {
 
       <div className={showAll ? "grid-view" : "row-view"}>
         {songs.map((song) => (
-          <div key={song.id} className="song-card">
+          <div
+            key={song.id}
+            className="song-card"
+            onClick={() => navigate(`/songs/${song.id}`, { state: song })} // ✅ navigate to detail
+          >
             <img src={song.img} alt={song.title} className="song-image" />
             <div className="song-info">
               <p className="song-title">{song.title}</p>

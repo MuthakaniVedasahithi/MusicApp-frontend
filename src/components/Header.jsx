@@ -1,20 +1,23 @@
 // src/components/Header.jsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { songs } from "../components/TrendingSongs";
 import { artists } from "../components/Artists";
 import "./Header.css";
 import logo from "../assets/logo.png";
-import { FaSearch } from "react-icons/fa"; // search icon
-
+import { FaSearch } from "react-icons/fa";
 
 const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  
+  const navigate = useNavigate();
 
-  // Combine songs and artists into one searchable list
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("role");
+    navigate("/login");
+  };
+
   const combinedData = [...songs, ...artists];
-
-  // Filter based on search input
   const filteredResults = combinedData.filter((item) =>
     (item.title || item.name).toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -34,13 +37,12 @@ const Header = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-
           {searchTerm && (
             <div className="search-dropdown">
               {filteredResults.length > 0 ? (
                 filteredResults.map((item, index) => (
                   <div key={index} className="search-result">
-                    {(item.title || item.name)}
+                    {item.title || item.name}
                   </div>
                 ))
               ) : (
@@ -51,10 +53,9 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="auth-buttons">
-        <button className="login-btn">Login</button>
-        <button className="signup-btn">Sign Up</button>
-      </div>
+      <button className="logout-btn" onClick={handleLogout}>
+        Logout
+      </button>
     </header>
   );
 };
