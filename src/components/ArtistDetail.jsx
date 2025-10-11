@@ -16,12 +16,36 @@ const ArtistDetail = () => {
 
   if (!artist) return <p style={{ color: "white" }}>Artist not found.</p>;
 
-  const toggleHeart = (idx) => {
-    setLikedSongs((prev) => ({
-      ...prev,
-      [idx]: !prev[idx],
-    }));
+ const toggleHeart = (idx) => {
+  const uniqueId = `${artist.id}-${idx}`;
+
+  const song = {
+    id: uniqueId,
+    title: artist.songs[idx].title,
+    artist: artist.name,
+    img: artist.img,
+    duration: artist.songs[idx].duration,
   };
+
+  const stored = JSON.parse(localStorage.getItem("likedSongs")) || [];
+  const exists = stored.some((s) => s.id === uniqueId);
+
+  let updated;
+  if (exists) {
+    updated = stored.filter((s) => s.id !== uniqueId);
+  } else {
+    updated = [...stored, song];
+  }
+
+  localStorage.setItem("likedSongs", JSON.stringify(updated));
+
+  // Update local state
+  setLikedSongs((prev) => ({
+    ...prev,
+    [idx]: !prev[idx],
+  }));
+};
+
 
   const togglePlay = (idx) => {
     if (playingSong === idx) {
@@ -54,6 +78,24 @@ const ArtistDetail = () => {
 
     return () => clearInterval(interval);
   }, [isPlaying, playingSong]);
+
+  useEffect(() => {
+  // Get liked songs from localStorage
+  const savedLikes = JSON.parse(localStorage.getItem("likedSongs")) || [];
+
+  // Create an object to mark which song indices are liked
+  const newLikedSongs = {};
+
+  artist.songs.forEach((song, idx) => {
+    const uniqueId = `${artist.id}-${idx}`;
+    if (savedLikes.some((s) => s.id === uniqueId)) {
+      newLikedSongs[idx] = true;
+    }
+  });
+
+  setLikedSongs(newLikedSongs);
+}, [artist]);
+
 
   return (
     <div className="artist-detail-container">
