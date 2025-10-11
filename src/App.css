@@ -9,10 +9,16 @@
   font-family: "Segoe UI", sans-serif;
 }
 
+@keyframes colorShift {
+  0%   { background-color: #5f716f; }  /* pale green */
+  25%  { background-color: #6a8a88; }  /* pale pink */
+  50%  { background-color: #42425d; }  /* pale blue */
+  75%  { background-color: rgb(153, 155, 124) }  /* pale orange */
+  100% { background-color: #8b6f89; }  /* back to pale green */
+}
 
 
 
-/* Main area */
 .main-content {
   margin-left: 200px; /* leave space for sidebar */
   padding: 80px 20px 20px; /* leave space for header */
@@ -21,7 +27,6 @@
 }
 
 
-/* Content below header */
 .page-content {
   flex: 1;
   padding: 10px 20px;   /* reduce top padding (was probably 40px+) */
@@ -29,7 +34,7 @@
 }
 
 
-/* Section */
+
 .section {
   margin-bottom: 30px 0;
 }
