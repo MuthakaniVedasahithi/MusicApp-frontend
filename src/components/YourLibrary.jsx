@@ -5,11 +5,32 @@ const YourLibrary = () => {
   const [playlists, setPlaylists] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [newName, setNewName] = useState("");
+  const [likedSongs, setLikedSongs] = useState([]);
 
   useEffect(() => {
+  const loadFromStorage = () => {
     const saved = JSON.parse(localStorage.getItem("playlists")) || [];
     setPlaylists(saved);
-  }, []);
+
+    const liked = JSON.parse(localStorage.getItem("likedSongs")) || [];
+    setLikedSongs(liked);
+  };
+
+  loadFromStorage(); // Initial load
+
+  // Also reload when tab is active again (user navigates back)
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === "visible") {
+      loadFromStorage();
+    }
+  };
+
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+
+  return () => {
+    document.removeEventListener("visibilitychange", handleVisibilityChange);
+  };
+}, []);
 
   const saveToLocalStorage = (updatedList) => {
     localStorage.setItem("playlists", JSON.stringify(updatedList));
@@ -41,13 +62,42 @@ const YourLibrary = () => {
     setNewName("");
   };
 
+  const handleUnlike = (id) => {
+    const updated = likedSongs.filter((song) => song.id !== id);
+    localStorage.setItem("likedSongs", JSON.stringify(updated));
+    setLikedSongs(updated);
+  };
+
   return (
     <div className="library-page">
       <h2>Your Library</h2>
 
-      <div className="library-section">
-        <h3>Liked Songs</h3>
-        <p>(This section can later show your liked songs)</p>
+     <div className="library-section">
+  <h3>Liked Songs</h3>
+
+  <p className="liked-count">
+    💖 You have {likedSongs.length} liked {likedSongs.length === 1 ? "song" : "songs"}
+  </p>
+
+  {likedSongs.length === 0 ? (
+    <p>You haven’t liked any songs yet.</p>
+  ) : (
+    <ul className="liked-list">
+
+            {likedSongs.map((song) => (
+              <li key={song.id} className="liked-item">
+                <img src={song.img} alt={song.title} className="liked-img" />
+                <div className="liked-details">
+                  <p className="liked-title">{song.title}</p>
+                  <p className="liked-artist">{song.artist}</p>
+                </div>
+                <button className="unlike-btn" onClick={() => handleUnlike(song.id)}>
+                  ✖
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className="library-section">
@@ -67,16 +117,10 @@ const YourLibrary = () => {
                       onChange={(e) => setNewName(e.target.value)}
                       className="rename-input"
                     />
-                    <button
-                      className="save-btn"
-                      onClick={() => saveRename(index)}
-                    >
+                    <button className="save-btn" onClick={() => saveRename(index)}>
                       Save
                     </button>
-                    <button
-                      className="cancel-btn"
-                      onClick={() => setEditingIndex(null)}
-                    >
+                    <button className="cancel-btn" onClick={() => setEditingIndex(null)}>
                       Cancel
                     </button>
                   </>
@@ -84,16 +128,10 @@ const YourLibrary = () => {
                   <>
                     <span className="playlist-name">{pl}</span>
                     <div className="playlist-actions">
-                      <button
-                        className="rename-btn"
-                        onClick={() => handleRename(index)}
-                      >
+                      <button className="rename-btn" onClick={() => handleRename(index)}>
                         Rename
                       </button>
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(index)}
-                      >
+                      <button className="delete-btn" onClick={() => handleDelete(index)}>
                         Delete
                       </button>
                     </div>
