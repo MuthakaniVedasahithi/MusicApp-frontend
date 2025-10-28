@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { movies } from "./Movies";
 import "./MovieDetail.css";
@@ -11,20 +11,62 @@ const MovieDetail = () => {
 
   if (!movie) return <p>Movie not found.</p>;
 
+  // ✅ Handle Like/Unlike
   const toggleHeart = (idx) => {
+    const song = movie.songs[idx];
+    const likedSongsList = JSON.parse(localStorage.getItem("likedSongs")) || [];
+
+    const isAlreadyLiked = likedSongsList.some(
+      (s) => s.title === song.title && s.artist === song.singer
+    );
+
+    let updatedLikedSongs;
+    if (isAlreadyLiked) {
+      // remove if already liked
+      updatedLikedSongs = likedSongsList.filter(
+        (s) => !(s.title === song.title && s.artist === song.singer)
+      );
+    } else {
+      // add if not liked
+      updatedLikedSongs = [
+        ...likedSongsList,
+        {
+          id: Date.now(), // unique id
+          title: song.title,
+          artist: song.singer,
+          img: movie.img,
+        },
+      ];
+    }
+
+    localStorage.setItem("likedSongs", JSON.stringify(updatedLikedSongs));
+
     setLikedSongs((prev) => ({
       ...prev,
       [idx]: !prev[idx],
     }));
   };
 
+  // ✅ Keep liked hearts active when revisiting
+  useEffect(() => {
+    const likedSongsFromStorage = JSON.parse(localStorage.getItem("likedSongs")) || [];
+    const likedState = {};
+    movie.songs.forEach((song, idx) => {
+      likedState[idx] = likedSongsFromStorage.some(
+        (s) => s.title === song.title && s.artist === song.singer
+      );
+    });
+    setLikedSongs(likedState);
+  }, [movie]);
+
+  // ✅ Play/Pause toggle
   const togglePlay = (idx) => {
     setPlayingSong((prev) => (prev === idx ? null : idx));
   };
 
   return (
     <div className="movie-detail-container">
-      {/* Movie Image Banner */}
+      {/* Movie Banner */}
       <div
         className="movie-banner"
         style={{
@@ -46,21 +88,27 @@ const MovieDetail = () => {
                 <span className="song-title">{song.title}</span>
                 <span className="song-singer">- {song.singer}</span>
               </div>
+
               <div className="song-actions">
                 <span className="song-duration">{song.duration}</span>
+
+                {/* ▶ / ⏸ button */}
                 <button
                   className={`play ${playingSong === idx ? "active" : ""}`}
                   onClick={() => togglePlay(idx)}
                 >
                   {playingSong === idx ? "⏸" : "▶"}
                 </button>
+
+                {/* ❤️ Like button */}
                 <button
                   className={`heart ${likedSongs[idx] ? "active" : ""}`}
                   onClick={() => toggleHeart(idx)}
                 >
                   ♥
                 </button>
-                <button className="add">+</button>
+
+                <button className="add">＋</button>
               </div>
             </div>
           ))
@@ -69,7 +117,7 @@ const MovieDetail = () => {
         )}
       </div>
 
-      {/* 🎵 Bottom Player Bar */}
+      {/* 🎵 Bottom Player */}
       {playingSong !== null && (
         <div className="bottom-player">
           <div className="player-controls">
