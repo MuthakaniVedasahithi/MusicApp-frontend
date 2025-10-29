@@ -9,13 +9,21 @@ import MovieDetail from "./components/MovieDetail";
 import SongDetail from "./components/SongDetail";
 import ArtistDetail from "./components/ArtistDetail";
 import LoginPage from "./components/Login";
-import SignupForm from "./components/SignupForm"; // ✅ Add this import
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import SignupForm from "./components/SignupForm";
 import CreatePlaylist from "./components/CreatePlaylist";
 import YourLibrary from "./components/YourLibrary";
-const ProtectedRoute = ({ children }) => {
+import AdminPage from "./components/AdminPage"; // ✅ NEW import
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+// ✅ Updated ProtectedRoute with role-based access
+const ProtectedRoute = ({ children, adminOnly = false }) => {
   const user = localStorage.getItem("user");
-  return user ? children : <Navigate to="/login" replace />;
+  const role = localStorage.getItem("role");
+
+  if (!user) return <Navigate to="/login" replace />;
+  if (adminOnly && role !== "admin") return <Navigate to="/home" replace />;
+
+  return children;
 };
 
 const App = () => {
@@ -24,7 +32,17 @@ const App = () => {
       <Routes>
         {/* Public routes */}
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupForm />} /> 
+        <Route path="/signup" element={<SignupForm />} />
+
+        {/* ✅ Admin route */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute adminOnly>
+              <AdminPage />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Protected app routes */}
         <Route
@@ -71,8 +89,12 @@ const App = () => {
                         element={<MovieDetail />}
                       />
                       <Route path="/artists/:id" element={<ArtistDetail />} />
-                       <Route path="/create-playlist" element={<CreatePlaylist />} />
-              <Route path="/library" element={<YourLibrary />} />
+                      <Route
+                        path="/create-playlist"
+                        element={<CreatePlaylist />}
+                      />
+                      <Route path="/library" element={<YourLibrary />} />
+
                       {/* Song detail */}
                       <Route path="/songs/:songId" element={<SongDetail />} />
                     </Routes>
