@@ -43,9 +43,7 @@
   background-color: #333;
 }
 
-/* ===========================
-   Professional Popup Styling
-   =========================== */
+
 .popup {
   position: fixed;
   top: 50%;
@@ -88,7 +86,6 @@
   border-left: 6px solid #ff9800;
 }
 
-/* Animation for smooth appearance and disappearance */
 @keyframes fadeInOut {
   0% {
     opacity: 0;

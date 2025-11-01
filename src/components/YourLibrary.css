@@ -41,13 +41,11 @@
   flex: 1;
 }
 
-/* Initially hide the rename/delete buttons */
 .playlist-actions {
   display: none;
   gap: 10px;
 }
 
-/* Show actions only on hover */
 .playlist-item:hover .playlist-actions {
   display: flex;
 }
