@@ -1,128 +1,127 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { artists } from "./Artists";
+import React, { useState, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FaArrowLeft, FaHeart, FaPlay, FaPlus, FaPause } from "react-icons/fa";
 import "./ArtistDetail.css";
 
 const ArtistDetail = () => {
-  const { id } = useParams();
-  const { state } = useLocation();
+  const { state: artist } = useLocation();
   const navigate = useNavigate();
+  const [selectedSong, setSelectedSong] = useState(null);
+  const [likedSongs, setLikedSongs] = useState([]);
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef(null);
 
-  const artist = state || artists.find((a) => a.id === parseInt(id));
-  const [likedSongs, setLikedSongs] = useState({});
-  const [playingSong, setPlayingSong] = useState(null);
-  const [progress, setProgress] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
+  if (!artist)
+    return <p style={{ color: "white" }}>Artist data not found</p>;
 
-  if (!artist) return <p style={{ color: "white" }}>Artist not found.</p>;
-
-  const toggleHeart = (idx) => {
-    setLikedSongs((prev) => ({
-      ...prev,
-      [idx]: !prev[idx],
-    }));
+  const toggleLike = (songTitle) => {
+    setLikedSongs((prev) =>
+      prev.includes(songTitle)
+        ? prev.filter((s) => s !== songTitle)
+        : [...prev, songTitle]
+    );
   };
 
-  const togglePlay = (idx) => {
-    if (playingSong === idx) {
-      setIsPlaying(!isPlaying);
+  const handlePlay = (song) => {
+    if (selectedSong?.title === song.title && playing) {
+      audioRef.current.pause();
+      setPlaying(false);
     } else {
-      setPlayingSong(idx);
-      setProgress(0);
-      setIsPlaying(true);
+      setSelectedSong(song);
+      setPlaying(true);
+      setTimeout(() => {
+        if (audioRef.current) audioRef.current.play();
+      }, 200);
     }
   };
 
-  const handleProgressChange = (e) => {
-    setProgress(e.target.value);
-  };
-
-  // Simulate song playing progress
-  useEffect(() => {
-    if (!isPlaying || playingSong === null) return;
-
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setIsPlaying(false);
-          return 100;
-        }
-        return prev + 1;
-      });
-    }, 500); // speed of progress (adjust as needed)
-
-    return () => clearInterval(interval);
-  }, [isPlaying, playingSong]);
-
   return (
     <div className="artist-detail-container">
-      {/* Top Banner */}
-      <div className="artist-banner">
-        <div className="banner-overlay">
-          <h1 className="artist-name-detail">{artist.name}</h1>
-          <img src={artist.img} alt={artist.name} className="artist-center-img" />
-        </div>
+      <div className="artist-header">
+        {/* ✅ Back button navigates to home */}
+        <button onClick={() => navigate("/home")} className="back-btn">
+          <FaArrowLeft /> Back
+        </button>
+        <h2>{artist.name}</h2>
       </div>
 
-      {/* Songs List */}
+      <div className="artist-info">
+        {artist.imageBase64 && (
+          <img
+            src={`data:image/jpeg;base64,${artist.imageBase64}`}
+            alt={artist.name}
+            className="artist-image"
+          />
+        )}
+      </div>
+
       <div className="artist-songs-list">
-        {artist.songs.length > 0 ? (
+        <h3>Songs by {artist.name}</h3>
+
+        {/* ✅ Ensure songs are rendered correctly */}
+        {artist.songs && artist.songs.length > 0 ? (
           artist.songs.map((song, idx) => (
             <div key={idx} className="song-row">
               <div className="song-info">
-                <span className="song-title">{song.title}</span>
-                <span className="song-singer">({song.duration})</span>
+                <p className="song-title">🎵 {song.title}</p>
               </div>
               <div className="song-actions">
                 <button
-                  className={`play ${playingSong === idx && isPlaying ? "active" : ""}`}
-                  onClick={() => togglePlay(idx)}
+                  className={`heart ${
+                    likedSongs.includes(song.title) ? "active" : ""
+                  }`}
+                  onClick={() => toggleLike(song.title)}
                 >
-                  {playingSong === idx && isPlaying ? "⏸" : "▶"}
+                  <FaHeart />
                 </button>
+
                 <button
-                  className={`heart ${likedSongs[idx] ? "active" : ""}`}
-                  onClick={() => toggleHeart(idx)}
+                  className={`play ${
+                    selectedSong?.title === song.title && playing ? "active" : ""
+                  }`}
+                  onClick={() => handlePlay(song)}
                 >
-                  ♥
+                  {selectedSong?.title === song.title && playing ? (
+                    <FaPause />
+                  ) : (
+                    <FaPlay />
+                  )}
                 </button>
-                <button className="add">+</button>
+
+                <button className="add">
+                  <FaPlus />
+                </button>
               </div>
             </div>
           ))
         ) : (
-          <p>No songs available.</p>
+          <p style={{ color: "white" }}>No songs available</p>
+        )}
+
+        {selectedSong && (
+          <div className="song-player">
+            <h4 style={{ color: "white" }}>
+              Now Playing: 🎧 {selectedSong.title}
+            </h4>
+            <audio
+              ref={audioRef}
+              key={selectedSong.title}
+              controls
+              autoPlay
+              onPlay={() => setPlaying(true)}
+              onPause={() => setPlaying(false)}
+              onEnded={() => setPlaying(false)}
+            >
+              <source
+                src={`data:audio/${
+                  selectedSong.type || "mp3"
+                };base64,${selectedSong.dataBase64}`}
+                type={`audio/${selectedSong.type || "mp3"}`}
+              />
+            </audio>
+          </div>
         )}
       </div>
-
-      {/* Bottom Player */}
-      {playingSong !== null && (
-        <div className="bottom-player">
-          <div className="player-controls">
-            <span className="time">0:00</span>
-            <div className="progress-wrapper">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={progress}
-                onChange={handleProgressChange}
-                className="progress-bar"
-              />
-            </div>
-            <span className="time">{artist.songs[playingSong].duration}</span>
-          </div>
-
-          <div className="main-buttons">
-            <button>⏮</button>
-            <button className="play-big" onClick={() => togglePlay(playingSong)}>
-              {playingSong !== null && isPlaying ? "⏸" : "▶"}
-            </button>
-            <button>⏭</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
