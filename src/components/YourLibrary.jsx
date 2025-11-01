@@ -16,9 +16,8 @@ const YourLibrary = () => {
     setLikedSongs(liked);
   };
 
-  loadFromStorage(); // Initial load
+  loadFromStorage(); 
 
-  // Also reload when tab is active again (user navigates back)
   const handleVisibilityChange = () => {
     if (document.visibilityState === "visible") {
       loadFromStorage();

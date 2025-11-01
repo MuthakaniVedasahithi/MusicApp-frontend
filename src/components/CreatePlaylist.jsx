@@ -42,7 +42,6 @@ const CreatePlaylist = () => {
       />
       <button onClick={handleSave}>Save Playlist</button>
 
-      {/* Professional Animated Popup */}
       <AnimatePresence>
         {popup.visible && (
           <motion.div
