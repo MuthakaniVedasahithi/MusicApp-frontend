@@ -101,3 +101,60 @@
   border-color: #333;
   color: #333;
 }
+.liked-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.liked-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  background-color: #1f1f2e;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.liked-item:hover {
+  background-color: #2a2a3d;
+}
+
+.liked-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-right: 12px;
+}
+
+.liked-details {
+  flex: 1;
+}
+
+.liked-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.liked-artist {
+  margin: 0;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.unlike-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: #ff6666;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.unlike-btn:hover {
+  color: #ff4444;
+}

@@ -19,32 +19,51 @@ const SongDetail = () => {
   if (!song) return <p style={{ color: "white" }}>Song not found.</p>;
 
   const togglePlay = () => setIsPlaying(!isPlaying);
-  const toggleLike = () => setLiked(!liked);
 
-  // Animate progress bar
+  const toggleLike = () => {
+    const likedSongs = JSON.parse(localStorage.getItem("likedSongs")) || [];
+
+    if (!liked) {
+      const updated = [...likedSongs, song];
+      localStorage.setItem("likedSongs", JSON.stringify(updated));
+    } else {
+      const updated = likedSongs.filter((s) => s.id !== song.id);
+      localStorage.setItem("likedSongs", JSON.stringify(updated));
+    }
+
+    setLiked(!liked);
+  };
+
+  // Check if song is already liked
+  useEffect(() => {
+    const likedSongs = JSON.parse(localStorage.getItem("likedSongs")) || [];
+    const isLiked = likedSongs.some((s) => s.id === song.id);
+    setLiked(isLiked);
+  }, [song.id]);
+
+  // Progress bar animation
   useEffect(() => {
     if (isPlaying) {
       intervalRef.current = setInterval(() => {
         setProgress((prev) => {
           if (prev >= 100) {
-            clearInterval(intervalRef.current); // stop at 100%
+            clearInterval(intervalRef.current);
             return 100;
           }
-          return prev + 0.5; // speed of progress
+          return prev + 0.5;
         });
       }, 200);
     } else {
       clearInterval(intervalRef.current);
     }
+
     return () => clearInterval(intervalRef.current);
   }, [isPlaying]);
 
-  // Drag/seek handler
   const handleProgressChange = (e) => {
     setProgress(Number(e.target.value));
   };
 
-  // Remaining songs
   const remainingSongs = songs.filter((s) => s.id !== song.id);
 
   return (
@@ -64,7 +83,6 @@ const SongDetail = () => {
         <h1 className="song-detail-title">{song.title}</h1>
         <p className="song-detail-artist">{song.artist}</p>
 
-        {/* 🎚 Progress bar */}
         <input
           type="range"
           min="0"
