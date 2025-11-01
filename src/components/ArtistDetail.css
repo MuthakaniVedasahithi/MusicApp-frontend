@@ -114,10 +114,10 @@
 }
 
 .progress-wrapper {
-  width: 50%;       /* Medium width */
+  width: 50%;     
   display: flex;
-  justify-content: flex-start; /* Slightly left */
-  margin-left: 20px;          /* Adjust as needed */
+  justify-content: flex-start; 
+  margin-left: 20px;          
 }
 
 .progress-bar {
@@ -161,3 +161,86 @@
   border: none;
   cursor: pointer;
 }
+
+.back-btn {
+  position: absolute;
+  left: 20px; 
+  top: 15px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+
+.song-actions button.add {
+  color: #1db954;
+  
+  transition: color 0.3s;
+}
+
+.song-actions button.add:hover {
+  color: #22ff66;
+}
+
+
+.song-actions button.play.active {
+  color: #1db954;
+}
+
+.song-actions button.heart.active {
+  color: red;
+}
+.song-actions button.heart {
+  font-size: 18px; 
+}
+
+.song-actions button {
+  font-size: 18px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #ffffff;
+  transition: color 0.3s;
+}
+
+.song-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 40px auto;            /* centers the section and adds vertical space */
+  text-align: center;
+  padding: 20px;
+  background-color: #141414;    /* subtle background for contrast */
+  border-radius: 10px;
+  width: 70%;
+  box-shadow: 0 0 15px rgba(175, 56, 129, 0.4); /* soft shadow */
+}
+
+.song-player audio {
+  width: 80%;       /* slightly wider and responsive */
+  margin-top: 10px; /* small gap between text and bar */
+  outline: none;
+  border-radius: 5px;
+}
+
+.artist-header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* centers content horizontally */
+    position: relative;
+
+}
+.artist-header h2 {
+  font-size: 40px;
+  font-weight: 800;
+  color: #1db954; /* Spotify green highlight or use white if you prefer */
+  letter-spacing: 1px;
+  text-align: center;
+}
+
