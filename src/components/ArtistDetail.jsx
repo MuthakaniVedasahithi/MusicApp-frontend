@@ -1,63 +1,11 @@
-<<<<<<< Updated upstream
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { artists } from "./Artists";
-=======
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaHeart, FaPlay, FaPlus, FaPause } from "react-icons/fa";
->>>>>>> Stashed changes
 import "./ArtistDetail.css";
 
 const ArtistDetail = () => {
-  const { id } = useParams();
-  const { state } = useLocation();
+  const { state: artist } = useLocation();
   const navigate = useNavigate();
-<<<<<<< Updated upstream
-
-  const artist = state || artists.find((a) => a.id === parseInt(id));
-  const [likedSongs, setLikedSongs] = useState({});
-  const [playingSong, setPlayingSong] = useState(null);
-  const [progress, setProgress] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  if (!artist) return <p style={{ color: "white" }}>Artist not found.</p>;
-
- const toggleHeart = (idx) => {
-  const uniqueId = `${artist.id}-${idx}`;
-
-  const song = {
-    id: uniqueId,
-    title: artist.songs[idx].title,
-    artist: artist.name,
-    img: artist.img,
-    duration: artist.songs[idx].duration,
-  };
-
-  const stored = JSON.parse(localStorage.getItem("likedSongs")) || [];
-  const exists = stored.some((s) => s.id === uniqueId);
-
-  let updated;
-  if (exists) {
-    updated = stored.filter((s) => s.id !== uniqueId);
-  } else {
-    updated = [...stored, song];
-  }
-
-  localStorage.setItem("likedSongs", JSON.stringify(updated));
-
-  // Update local state
-  setLikedSongs((prev) => ({
-    ...prev,
-    [idx]: !prev[idx],
-  }));
-};
-
-
-  const togglePlay = (idx) => {
-    if (playingSong === idx) {
-      setIsPlaying(!isPlaying);
-=======
   const [selectedSong, setSelectedSong] = useState(null);
   const [likedSongs, setLikedSongs] = useState([]); // stores titles of liked songs
   const [playing, setPlaying] = useState(false);
@@ -120,65 +68,16 @@ const ArtistDetail = () => {
     if (selectedSong?.title === song.title && playing) {
       audioRef.current.pause();
       setPlaying(false);
->>>>>>> Stashed changes
     } else {
-      setPlayingSong(idx);
-      setProgress(0);
-      setIsPlaying(true);
+      setSelectedSong(song);
+      setPlaying(true);
+      setTimeout(() => {
+        if (audioRef.current) audioRef.current.play();
+      }, 200);
     }
   };
 
-<<<<<<< Updated upstream
-  const handleProgressChange = (e) => {
-    setProgress(e.target.value);
-  };
-
-  // Simulate song playing progress
-  useEffect(() => {
-    if (!isPlaying || playingSong === null) return;
-
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setIsPlaying(false);
-          return 100;
-        }
-        return prev + 1;
-      });
-    }, 500); // speed of progress (adjust as needed)
-
-    return () => clearInterval(interval);
-  }, [isPlaying, playingSong]);
-
-  useEffect(() => {
-  // Get liked songs from localStorage
-  const savedLikes = JSON.parse(localStorage.getItem("likedSongs")) || [];
-
-  // Create an object to mark which song indices are liked
-  const newLikedSongs = {};
-
-  artist.songs.forEach((song, idx) => {
-    const uniqueId = `${artist.id}-${idx}`;
-    if (savedLikes.some((s) => s.id === uniqueId)) {
-      newLikedSongs[idx] = true;
-    }
-  });
-
-  setLikedSongs(newLikedSongs);
-}, [artist]);
-
-
-  return (
-    <div className="artist-detail-container">
-      {/* Top Banner */}
-      <div className="artist-banner">
-        <div className="banner-overlay">
-          <h1 className="artist-name-detail">{artist.name}</h1>
-          <img src={artist.img} alt={artist.name} className="artist-center-img" />
-        </div>
-=======
-  // 🎵 Add song to playlist
+  // 🎵 Add song to playlist (with artist image)
   const handleAddToPlaylist = (playlistName, song) => {
     const updatedPlaylists = { ...playlists };
     if (!updatedPlaylists[playlistName]) updatedPlaylists[playlistName] = [];
@@ -238,63 +137,49 @@ const ArtistDetail = () => {
       </div>
 
       <div className="artist-info">
-        <img
-          src={
-            artist.imageBase64
-              ? `data:image/jpeg;base64,${artist.imageBase64}`
-              : artist.image || "/default-song.png"
-          }
-          alt={artist.name}
-          className="artist-image"
-        />
->>>>>>> Stashed changes
+        {artist.imageBase64 || artist.image ? (
+          <img
+            src={
+              artist.imageBase64
+                ? `data:image/jpeg;base64,${artist.imageBase64}`
+                : artist.image
+            }
+            alt={artist.name}
+            className="artist-image"
+          />
+        ) : (
+          <img src="/default-song.png" alt="default" className="artist-image" />
+        )}
       </div>
 
-      {/* Songs List */}
       <div className="artist-songs-list">
-<<<<<<< Updated upstream
-        {artist.songs.length > 0 ? (
-=======
         <h3>Songs by {artist.name}</h3>
 
         {artist.songs && artist.songs.length > 0 ? (
->>>>>>> Stashed changes
           artist.songs.map((song, idx) => (
             <div key={idx} className="song-row">
               <div className="song-info">
-                <span className="song-title">{song.title}</span>
-                <span className="song-singer">({song.duration})</span>
+                <p className="song-title">🎵 {song.title}</p>
               </div>
 
               <div className="song-actions">
                 {/* ❤️ Like Button */}
                 <button
-<<<<<<< Updated upstream
-                  className={`play ${playingSong === idx && isPlaying ? "active" : ""}`}
-                  onClick={() => togglePlay(idx)}
-=======
                   className={`heart ${
                     likedSongs.includes(song.title) ? "active" : ""
                   }`}
                   onClick={() => toggleLike(song)}
->>>>>>> Stashed changes
                 >
-                  {playingSong === idx && isPlaying ? "⏸" : "▶"}
+                  <FaHeart />
                 </button>
-<<<<<<< Updated upstream
-=======
 
                 {/* ▶️ Play Button */}
->>>>>>> Stashed changes
                 <button
-                  className={`heart ${likedSongs[idx] ? "active" : ""}`}
-                  onClick={() => toggleHeart(idx)}
+                  className={`play ${
+                    selectedSong?.title === song.title && playing ? "active" : ""
+                  }`}
+                  onClick={() => handlePlay(song)}
                 >
-<<<<<<< Updated upstream
-                  ♥
-                </button>
-                <button className="add">+</button>
-=======
                   {selectedSong?.title === song.title && playing ? (
                     <FaPause />
                   ) : (
@@ -330,14 +215,10 @@ const ArtistDetail = () => {
                     </div>
                   )}
                 </div>
->>>>>>> Stashed changes
               </div>
             </div>
           ))
         ) : (
-<<<<<<< Updated upstream
-          <p>No songs available.</p>
-=======
           <p style={{ color: "white" }}>No songs available</p>
         )}
 
@@ -364,37 +245,8 @@ const ArtistDetail = () => {
               />
             </audio>
           </div>
->>>>>>> Stashed changes
         )}
       </div>
-
-      {/* Bottom Player */}
-      {playingSong !== null && (
-        <div className="bottom-player">
-          <div className="player-controls">
-            <span className="time">0:00</span>
-            <div className="progress-wrapper">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={progress}
-                onChange={handleProgressChange}
-                className="progress-bar"
-              />
-            </div>
-            <span className="time">{artist.songs[playingSong].duration}</span>
-          </div>
-
-          <div className="main-buttons">
-            <button>⏮</button>
-            <button className="play-big" onClick={() => togglePlay(playingSong)}>
-              {playingSong !== null && isPlaying ? "⏸" : "▶"}
-            </button>
-            <button>⏭</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

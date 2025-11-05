@@ -17,6 +17,7 @@ const YourLibrary = () => {
       setPlaylists(savedPlaylists);
       setLikedSongs(liked);
     };
+
     loadFromStorage();
 
     window.addEventListener("storage", loadFromStorage);
@@ -33,14 +34,6 @@ const YourLibrary = () => {
     setPlaylists(updated);
   };
 
-<<<<<<< Updated upstream
-  loadFromStorage(); // Initial load
-
-  // Also reload when tab is active again (user navigates back)
-  const handleVisibilityChange = () => {
-    if (document.visibilityState === "visible") {
-      loadFromStorage();
-=======
   // 🗑️ Delete playlist
   const handleDeletePlaylist = (playlistName) => {
     if (window.confirm(`Delete playlist "${playlistName}"?`)) {
@@ -48,7 +41,6 @@ const YourLibrary = () => {
       delete updated[playlistName];
       savePlaylists(updated);
       if (selectedPlaylist === playlistName) setSelectedPlaylist(null);
->>>>>>> Stashed changes
     }
   };
 

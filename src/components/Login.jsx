@@ -30,7 +30,12 @@ export default function LoginPage() {
         localStorage.setItem("user", JSON.stringify(res.data));
         localStorage.setItem("role", role);
 
-        navigate("/home");
+        // ✅ Redirect based on role
+        if (role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/home");
+        }
       } else {
         setMessage("Invalid credentials");
       }
@@ -76,7 +81,6 @@ export default function LoginPage() {
           <button type="submit">Login</button>
         </form>
 
-        {/* ✅ Signup button */}
         <button
           type="button"
           className="signup-btn"

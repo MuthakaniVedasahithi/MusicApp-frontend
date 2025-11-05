@@ -75,133 +75,6 @@
 }
 
 .song-actions button {
-  font-size: 24px;
-  cursor: pointer;
-  background: none;
-  border: none;
-  color: #fff;
-  transition: color 0.3s;
-}
-
-.song-actions button.heart.active {
-  color: red;
-}
-
-.song-actions button.play.active {
-  color: #1db954;
-}
-
-/* Bottom Player */
-.bottom-player {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: #181818;
-  padding: 15px;
-  border-top: 1px solid #333;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.player-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  gap: 15px;
-}
-
-.progress-wrapper {
-  width: 50%;       /* Medium width */
-  display: flex;
-  justify-content: flex-start; /* Slightly left */
-  margin-left: 20px;          /* Adjust as needed */
-}
-
-.progress-bar {
-  width: 100%;
-  height: 8px;
-  border-radius: 5px;
-  background: #555;
-  appearance: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.progress-bar::-webkit-slider-thumb {
-  appearance: none;
-  height: 14px;
-  width: 14px;
-  border-radius: 50%;
-  background: #1db954;
-  cursor: pointer;
-}
-
-
-.progress-value {
-  margin-top: 5px;
-  color: #1db954;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-
-.main-buttons {
-  margin-top: 10px;
-  display: flex;
-  gap: 15px;
-}
-
-.main-buttons button {
-  font-size: 22px;
-  color: white;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-<<<<<<< Updated upstream
-=======
-
-.back-btn {
-  position: absolute;
-  left: 20px; 
-  top: 15px;
-  background-color: transparent;
-  color: white;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: color 0.2s ease;
-}
-
-
-.song-actions button.add {
-  color: #1db954;
-  
-  transition: color 0.3s;
-}
-
-.song-actions button.add:hover {
-  color: #22ff66;
-}
-
-
-.song-actions button.play.active {
-  color: #1db954;
-}
-
-.song-actions button.heart.active {
-  color: red;
-}
-.song-actions button.heart {
-  font-size: 18px; 
-}
-
-.song-actions button {
   font-size: 18px;
   cursor: pointer;
   background: none;
@@ -210,42 +83,28 @@
   transition: color 0.3s;
 }
 
-.song-player {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 40px auto;            /* centers the section and adds vertical space */
-  text-align: center;
-  padding: 20px;
-  background-color: #141414;    /* subtle background for contrast */
-  border-radius: 10px;
-  width: 70%;
-  box-shadow: 0 0 15px rgba(175, 56, 129, 0.4); /* soft shadow */
+.song-actions button.heart.active {
+  color: red;
 }
 
-.song-player audio {
-  width: 80%;       /* slightly wider and responsive */
-  margin-top: 10px; /* small gap between text and bar */
-  outline: none;
-  border-radius: 5px;
+.song-actions button.play.active {
+  color: #1db954;
 }
 
-.artist-header {
-  display: flex;
-  align-items: center;
-  justify-content: center; /* centers content horizontally */
-    position: relative;
+.song-actions button.add {
+  color: #1db954;
+  transition: color 0.3s;
+}
 
+.song-actions button.add:hover {
+  color: #22ff66;
 }
-.artist-header h2 {
-  font-size: 40px;
-  font-weight: 800;
-  color: #1db954; /* Spotify green highlight or use white if you prefer */
-  letter-spacing: 1px;
-  text-align: center;
+
+.song-actions button.heart {
+  font-size: 18px;
 }
-/* Playlist Dropdown */
+
+/* Dropdown for adding to playlist */
 .dropdown-container {
   position: relative;
   display: inline-block;
@@ -289,4 +148,122 @@
   font-size: 14px;
 }
 
->>>>>>> Stashed changes
+/* Bottom Player */
+.bottom-player {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #181818;
+  padding: 15px;
+  border-top: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 15px;
+}
+
+.progress-wrapper {
+  width: 50%;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 20px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 5px;
+  background: #555;
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.progress-bar::-webkit-slider-thumb {
+  appearance: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: #1db954;
+  cursor: pointer;
+}
+
+.progress-value {
+  margin-top: 5px;
+  color: #1db954;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.main-buttons {
+  margin-top: 10px;
+  display: flex;
+  gap: 15px;
+}
+
+.main-buttons button {
+  font-size: 22px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Header Section */
+.artist-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.artist-header h2 {
+  font-size: 40px;
+  font-weight: 800;
+  color: #1db954;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.back-btn {
+  position: absolute;
+  left: 20px;
+  top: 15px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.song-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 40px auto;
+  text-align: center;
+  padding: 20px;
+  background-color: #141414;
+  border-radius: 10px;
+  width: 70%;
+  box-shadow: 0 0 15px rgba(175, 56, 129, 0.4);
+}
+
+.song-player audio {
+  width: 80%;
+  margin-top: 10px;
+  outline: none;
+  border-radius: 5px;
+}
