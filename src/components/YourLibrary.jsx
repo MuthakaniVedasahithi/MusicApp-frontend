@@ -5,6 +5,7 @@ const YourLibrary = () => {
   const [playlists, setPlaylists] = useState({});
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [likedSongs, setLikedSongs] = useState([]);
+  const [showLikedSongs, setShowLikedSongs] = useState(false); // 👈 NEW toggle state
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
@@ -63,14 +64,10 @@ const YourLibrary = () => {
   // 🎧 Click a song to play it
   const handleSongClick = (song) => {
     const safeTitle = song.title?.trim();
-
-    // ✅ detect file or filePath
     const songFile = song.file || song.filePath || "";
     const songPath =
       songFile ||
       `/trendingsongs/${safeTitle?.toLowerCase().replace(/\s+/g, "_")}.mp3`;
-
-    console.log("🎵 Playing:", songPath);
 
     if (currentSong === songPath && isPlaying) {
       audioRef.current.pause();
@@ -86,7 +83,6 @@ const YourLibrary = () => {
         audioRef.current.load();
         audioRef.current
           .play()
-          .then(() => console.log("▶️ Now Playing:", song.title))
           .catch((err) => {
             console.error("Error playing audio:", err);
             alert(`⚠️ Couldn't play: ${song.title}`);
@@ -115,45 +111,60 @@ const YourLibrary = () => {
 
       {/* 💖 Liked Songs */}
       <div className="library-section">
-        <h3>Liked Songs</h3>
+        <h3
+          className="clickable-header"
+          onClick={() => setShowLikedSongs((prev) => !prev)}
+        >
+          💖 Liked Songs{" "}
+          <span className="toggle-arrow">
+            {showLikedSongs ? "▲" : "▼"}
+          </span>
+        </h3>
         <p className="liked-count">
-          💖 You have {likedSongs.length} liked{" "}
+          You have {likedSongs.length} liked{" "}
           {likedSongs.length === 1 ? "song" : "songs"}
         </p>
 
-        {likedSongs.length === 0 ? (
-          <p>You haven’t liked any songs yet.</p>
-        ) : (
-          <ul className="liked-list">
-            {likedSongs.map((song) => (
-              <li
-                key={song.id}
-                className={`liked-item ${
-                  currentSong?.includes(song.title) && isPlaying ? "playing" : ""
-                }`}
-                onClick={() => handleSongClick(song)}
-              >
-                <img
-                  src={getSongImage(song)}
-                  alt={song.title}
-                  className="liked-img"
-                />
-                <div className="liked-details">
-                  <p className="liked-title">{song.title}</p>
-                  <p className="liked-artist">{song.artist}</p>
-                </div>
-                <button
-                  className="unlike-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleUnlike(song.id);
-                  }}
-                >
-                  ✖
-                </button>
-              </li>
-            ))}
-          </ul>
+        {/* 👇 Only show liked songs when expanded */}
+        {showLikedSongs && (
+          <>
+            {likedSongs.length === 0 ? (
+              <p>You haven’t liked any songs yet.</p>
+            ) : (
+              <ul className="liked-list">
+                {likedSongs.map((song) => (
+                  <li
+                    key={song.id}
+                    className={`liked-item ${
+                      currentSong?.includes(song.title) && isPlaying
+                        ? "playing"
+                        : ""
+                    }`}
+                    onClick={() => handleSongClick(song)}
+                  >
+                    <img
+                      src={getSongImage(song)}
+                      alt={song.title}
+                      className="liked-img"
+                    />
+                    <div className="liked-details">
+                      <p className="liked-title">{song.title}</p>
+                      <p className="liked-artist">{song.artist}</p>
+                    </div>
+                    <button
+                      className="unlike-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleUnlike(song.id);
+                      }}
+                    >
+                      ✖
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
         )}
       </div>
 
@@ -230,7 +241,6 @@ const YourLibrary = () => {
         </div>
       )}
 
-      {/* 🎶 Hidden Audio Player */}
       <audio ref={audioRef} src={currentSong} onEnded={() => setIsPlaying(false)} />
     </div>
   );
