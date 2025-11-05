@@ -1,97 +1,162 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./YourLibrary.css";
 
 const YourLibrary = () => {
-  const [playlists, setPlaylists] = useState([]);
-  const [editingIndex, setEditingIndex] = useState(null);
-  const [newName, setNewName] = useState("");
+  const [playlists, setPlaylists] = useState({});
+  const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [likedSongs, setLikedSongs] = useState([]);
+  const [currentSong, setCurrentSong] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
 
+  // ✅ Load from localStorage
   useEffect(() => {
-  const loadFromStorage = () => {
-    const saved = JSON.parse(localStorage.getItem("playlists")) || [];
-    setPlaylists(saved);
+    const loadFromStorage = () => {
+      const savedPlaylists = JSON.parse(localStorage.getItem("playlists")) || {};
+      const liked = JSON.parse(localStorage.getItem("likedSongs")) || [];
+      setPlaylists(savedPlaylists);
+      setLikedSongs(liked);
+    };
+    loadFromStorage();
 
-    const liked = JSON.parse(localStorage.getItem("likedSongs")) || [];
-    setLikedSongs(liked);
+    window.addEventListener("storage", loadFromStorage);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") loadFromStorage();
+    });
+
+    return () => window.removeEventListener("storage", loadFromStorage);
+  }, []);
+
+  // ✅ Save playlists
+  const savePlaylists = (updated) => {
+    localStorage.setItem("playlists", JSON.stringify(updated));
+    setPlaylists(updated);
   };
 
+<<<<<<< Updated upstream
   loadFromStorage(); // Initial load
 
   // Also reload when tab is active again (user navigates back)
   const handleVisibilityChange = () => {
     if (document.visibilityState === "visible") {
       loadFromStorage();
+=======
+  // 🗑️ Delete playlist
+  const handleDeletePlaylist = (playlistName) => {
+    if (window.confirm(`Delete playlist "${playlistName}"?`)) {
+      const updated = { ...playlists };
+      delete updated[playlistName];
+      savePlaylists(updated);
+      if (selectedPlaylist === playlistName) setSelectedPlaylist(null);
+>>>>>>> Stashed changes
     }
   };
 
-  document.addEventListener("visibilitychange", handleVisibilityChange);
-
-  return () => {
-    document.removeEventListener("visibilitychange", handleVisibilityChange);
-  };
-}, []);
-
-  const saveToLocalStorage = (updatedList) => {
-    localStorage.setItem("playlists", JSON.stringify(updatedList));
-    setPlaylists(updatedList);
+  // ❌ Remove song from playlist
+  const handleRemoveSong = (playlistName, songId) => {
+    const updated = { ...playlists };
+    updated[playlistName] = updated[playlistName].filter(
+      (song) => song.id !== songId
+    );
+    savePlaylists(updated);
   };
 
-  const handleDelete = (index) => {
-    if (window.confirm("Are you sure you want to delete this playlist?")) {
-      const updated = playlists.filter((_, i) => i !== index);
-      saveToLocalStorage(updated);
-    }
-  };
-
-  const handleRename = (index) => {
-    setEditingIndex(index);
-    setNewName(playlists[index]);
-  };
-
-  const saveRename = (index) => {
-    if (!newName.trim()) {
-      alert("Please enter a valid name.");
-      return;
-    }
-
-    const updated = [...playlists];
-    updated[index] = newName.trim();
-    saveToLocalStorage(updated);
-    setEditingIndex(null);
-    setNewName("");
-  };
-
+  // 💔 Unlike a song
   const handleUnlike = (id) => {
     const updated = likedSongs.filter((song) => song.id !== id);
     localStorage.setItem("likedSongs", JSON.stringify(updated));
     setLikedSongs(updated);
   };
 
+  // 🎧 Click a song to play it
+  const handleSongClick = (song) => {
+    const safeTitle = song.title?.trim();
+
+    // ✅ detect file or filePath
+    const songFile = song.file || song.filePath || "";
+    const songPath =
+      songFile ||
+      `/trendingsongs/${safeTitle?.toLowerCase().replace(/\s+/g, "_")}.mp3`;
+
+    console.log("🎵 Playing:", songPath);
+
+    if (currentSong === songPath && isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+      return;
+    }
+
+    setCurrentSong(songPath);
+    setIsPlaying(true);
+
+    setTimeout(() => {
+      if (audioRef.current) {
+        audioRef.current.load();
+        audioRef.current
+          .play()
+          .then(() => console.log("▶️ Now Playing:", song.title))
+          .catch((err) => {
+            console.error("Error playing audio:", err);
+            alert(`⚠️ Couldn't play: ${song.title}`);
+            setIsPlaying(false);
+          });
+      }
+    }, 200);
+  };
+
+  // 🖼️ Helper to get correct image
+  const getSongImage = (song) => {
+    if (!song) return "/default-cover.jpg";
+    return (
+      song.img ||
+      song.image ||
+      (song.imageBase64 && `data:image/jpeg;base64,${song.imageBase64}`) ||
+      (song.artistImg && song.artistImg) ||
+      (song.artistBase64 && `data:image/jpeg;base64,${song.artistBase64}`) ||
+      "/default-cover.jpg"
+    );
+  };
+
   return (
     <div className="library-page">
       <h2>Your Library</h2>
 
-     <div className="library-section">
-  <h3>Liked Songs</h3>
+      {/* 💖 Liked Songs */}
+      <div className="library-section">
+        <h3>Liked Songs</h3>
+        <p className="liked-count">
+          💖 You have {likedSongs.length} liked{" "}
+          {likedSongs.length === 1 ? "song" : "songs"}
+        </p>
 
-  <p className="liked-count">
-    💖 You have {likedSongs.length} liked {likedSongs.length === 1 ? "song" : "songs"}
-  </p>
-
-  {likedSongs.length === 0 ? (
-    <p>You haven’t liked any songs yet.</p>
-  ) : (
-    <ul className="liked-list">
-
+        {likedSongs.length === 0 ? (
+          <p>You haven’t liked any songs yet.</p>
+        ) : (
+          <ul className="liked-list">
             {likedSongs.map((song) => (
-              <li key={song.id} className="liked-item">
-                <img src={song.img} alt={song.title} className="liked-img" />
+              <li
+                key={song.id}
+                className={`liked-item ${
+                  currentSong?.includes(song.title) && isPlaying ? "playing" : ""
+                }`}
+                onClick={() => handleSongClick(song)}
+              >
+                <img
+                  src={getSongImage(song)}
+                  alt={song.title}
+                  className="liked-img"
+                />
                 <div className="liked-details">
                   <p className="liked-title">{song.title}</p>
                   <p className="liked-artist">{song.artist}</p>
                 </div>
-                <button className="unlike-btn" onClick={() => handleUnlike(song.id)}>
+                <button
+                  className="unlike-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleUnlike(song.id);
+                  }}
+                >
                   ✖
                 </button>
               </li>
@@ -100,48 +165,81 @@ const YourLibrary = () => {
         )}
       </div>
 
+      {/* 🎧 Playlists */}
       <div className="library-section">
         <h3>Your Playlists</h3>
-
-        {playlists.length === 0 ? (
+        {Object.keys(playlists).length === 0 ? (
           <p>No playlists yet. Go create one!</p>
         ) : (
           <ul className="playlist-list">
-            {playlists.map((pl, index) => (
-              <li key={index} className="playlist-item">
-                {editingIndex === index ? (
-                  <>
-                    <input
-                      type="text"
-                      value={newName}
-                      onChange={(e) => setNewName(e.target.value)}
-                      className="rename-input"
-                    />
-                    <button className="save-btn" onClick={() => saveRename(index)}>
-                      Save
-                    </button>
-                    <button className="cancel-btn" onClick={() => setEditingIndex(null)}>
-                      Cancel
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <span className="playlist-name">{pl}</span>
-                    <div className="playlist-actions">
-                      <button className="rename-btn" onClick={() => handleRename(index)}>
-                        Rename
-                      </button>
-                      <button className="delete-btn" onClick={() => handleDelete(index)}>
-                        Delete
-                      </button>
-                    </div>
-                  </>
-                )}
+            {Object.keys(playlists).map((name) => (
+              <li key={name} className="playlist-item">
+                <div
+                  className="playlist-header"
+                  onClick={() => setSelectedPlaylist(name)}
+                >
+                  <p className="playlist-name">🎧 {name}</p>
+                  <p className="playlist-count">
+                    {playlists[name]?.length || 0} songs
+                  </p>
+                </div>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDeletePlaylist(name)}
+                >
+                  Delete
+                </button>
               </li>
             ))}
           </ul>
         )}
       </div>
+
+      {/* 🎵 Selected Playlist Songs */}
+      {selectedPlaylist && (
+        <div className="library-section">
+          <h3>{selectedPlaylist} — Songs</h3>
+          {playlists[selectedPlaylist]?.length === 0 ? (
+            <p>No songs in this playlist yet.</p>
+          ) : (
+            <ul className="liked-list">
+              {playlists[selectedPlaylist].map((song) => (
+                <li
+                  key={song.id}
+                  className={`liked-item ${
+                    currentSong?.includes(song.title) && isPlaying
+                      ? "playing"
+                      : ""
+                  }`}
+                  onClick={() => handleSongClick(song)}
+                >
+                  <img
+                    src={getSongImage(song)}
+                    alt={song.title}
+                    className="liked-img"
+                  />
+                  <div className="liked-details">
+                    <p className="liked-title">{song.title}</p>
+                    <p className="liked-artist">{song.artist}</p>
+                  </div>
+                  <button
+                    className="unlike-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveSong(selectedPlaylist, song.id);
+                    }}
+                  >
+                    ✖
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      {/* 🎶 Hidden Audio Player */}
+      <audio ref={audioRef} src={currentSong} onEnded={() => setIsPlaying(false)} />
     </div>
   );
 };
