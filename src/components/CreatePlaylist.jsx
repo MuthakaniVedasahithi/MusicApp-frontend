@@ -7,22 +7,26 @@ const CreatePlaylist = () => {
   const [popup, setPopup] = useState({ visible: false, type: "", message: "" });
 
   const handleSave = () => {
-    if (!playlistName.trim()) {
+    const name = playlistName.trim();
+
+    if (!name) {
       showPopup("warning", "Please enter a playlist name.");
       return;
     }
 
-    const existing = JSON.parse(localStorage.getItem("playlists")) || [];
+    // ✅ Fetch existing playlists (object format)
+    const existing = JSON.parse(localStorage.getItem("playlists")) || {};
 
-    if (existing.includes(playlistName.trim())) {
+    if (existing[name]) {
       showPopup("warning", "Playlist name already exists!");
       return;
     }
 
-    const updated = [...existing, playlistName.trim()];
-    localStorage.setItem("playlists", JSON.stringify(updated));
+    // ✅ Add new playlist as empty array
+    existing[name] = [];
+    localStorage.setItem("playlists", JSON.stringify(existing));
 
-    showPopup("success", "Playlist created successfully!");
+    showPopup("success", `Playlist "${name}" created successfully!`);
     setPlaylistName("");
   };
 
