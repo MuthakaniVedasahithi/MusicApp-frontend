@@ -168,7 +168,6 @@
 .progress-slider {
   width: 250px;
   margin-top: 15px;
-  -webkit-appearance: none;
   background: transparent;
   cursor: pointer;
 }
@@ -205,3 +204,44 @@
   cursor: pointer;
 }
 
+/* Playlist dropdown */
+.add-playlist-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.playlist-dropdown {
+  position: absolute;
+  top: 120%; /* appear just below the Add button */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  border: 1px solid #444;
+  border-radius: 10px;
+  padding: 10px;
+  z-index: 1000; /* ensure it’s above other sections */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 150px;
+}
+
+.playlist-option {
+  background: none;
+  border: none;
+  color: white;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.2s ease;
+}
+
+.playlist-option:hover {
+  background: #3a86ff;
+}
+
+.empty {
+  color: #bbb;
+  font-size: 0.9rem;
+  text-align: center;
+}

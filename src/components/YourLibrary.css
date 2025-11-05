@@ -1,4 +1,5 @@
 .library-page {
+<<<<<<< Updated upstream
   padding: 30px;
   color: #111;
 }
@@ -68,63 +69,43 @@
 .save-btn:hover,
 .cancel-btn:hover {
   background-color: #222;
+=======
+  padding: 20px;
+>>>>>>> Stashed changes
   color: white;
 }
 
-.rename-input {
-  padding: 6px 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  margin-right: 10px;
-  width: 180px;
+.library-section {
+  margin-bottom: 30px;
 }
 
-.save-btn {
-  border-color: #4caf50;
-  color: #4caf50;
-}
-
-.cancel-btn {
-  border-color: #ff9800;
-  color: #ff9800;
-}
-
-.delete-btn {
-  border-color: #e53935;
-  color: #e53935;
-}
-
-.rename-btn {
-  border-color: #333;
-  color: #333;
-}
 .liked-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 10px 0;
 }
 
 .liked-item {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
-  background-color: #1f1f2e;
+  background-color: #2a2a40;
+  border-radius: 12px;
   padding: 10px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
+  margin-bottom: 10px;
+  transition: background 0.3s;
+  cursor: pointer;
 }
 
 .liked-item:hover {
-  background-color: #2a2a3d;
+  background-color: #3a3a5c;
 }
 
 .liked-img {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
   object-fit: cover;
-  border-radius: 6px;
-  margin-right: 12px;
+  margin-right: 15px;
 }
 
 .liked-details {
@@ -132,27 +113,72 @@
 }
 
 .liked-title {
+  font-weight: 600;
+  font-size: 1.1em;
   margin: 0;
-  font-size: 16px;
-  font-weight: bold;
-  color: #ffffff;
 }
 
 .liked-artist {
-  margin: 0;
-  font-size: 14px;
   color: #aaa;
+  font-size: 0.9em;
 }
 
 .unlike-btn {
-  background: transparent;
+  background: #ff4d4d;
+  color: white;
   border: none;
-  font-size: 20px;
-  color: #ff6666;
+  border-radius: 6px;
+  padding: 5px 10px;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: background 0.3s;
 }
 
 .unlike-btn:hover {
-  color: #ff4444;
+  background: #e33a3a;
+}
+
+/* Playlist Titles */
+.playlist-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.playlist-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2a2a40;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.playlist-header {
+  flex: 1;
+  cursor: pointer;
+}
+
+.playlist-name {
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.playlist-count {
+  font-size: 0.9em;
+  color: #aaa;
+}
+
+.delete-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #e33a3a;
 }
