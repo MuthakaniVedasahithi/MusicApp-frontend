@@ -84,10 +84,8 @@ const App = () => {
 
                       {/* Movies */}
                       <Route path="/movies" element={<Movies />} />
-                      <Route
-                        path="/movies/:category/:movieId"
-                        element={<MovieDetail />}
-                      />
+                      <Route path="/movies/:id" element={<MovieDetail />} />
+
                       <Route path="/artists/:id" element={<ArtistDetail />} />
                       <Route
                         path="/create-playlist"

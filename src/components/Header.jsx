@@ -12,15 +12,13 @@ const Header = () => {
   const [artists, setArtists] = useState([]);
   const navigate = useNavigate();
 
-  // ✅ Fetch both songs and artists from backend when the page loads
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [songsRes, artistsRes] = await Promise.all([
-  axios.get("http://localhost:7076/admin/songs"),
-  axios.get("http://localhost:7076/admin/artists"),
-]);
-
+          axios.get("http://localhost:7076/admin/songs"),
+          axios.get("http://localhost:7076/admin/artists"),
+        ]);
         setSongs(songsRes.data);
         setArtists(artistsRes.data);
       } catch (error) {
@@ -37,13 +35,26 @@ const Header = () => {
     navigate("/login");
   };
 
-  // ✅ Combine both fetched arrays for searching
-  const combinedData = [...songs, ...artists];
+  // ✅ Combine both for search
+  const combinedData = [
+    ...songs.map((song) => ({ ...song, type: "song" })),
+    ...artists.map((artist) => ({ ...artist, type: "artist" })),
+  ];
 
-  // ✅ Filter based on name or title
+  // ✅ Filter results
   const filteredResults = combinedData.filter((item) =>
     (item.title || item.name)?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // ✅ Handle click on search result
+  const handleResultClick = (item) => {
+    setSearchTerm("");
+    if (item.type === "song") {
+      navigate(`/songs/${item.id}`, { state: item });
+    } else if (item.type === "artist") {
+      navigate(`/artists/${item.id}`, { state: item });
+    }
+  };
 
   return (
     <header className="header">
@@ -64,7 +75,11 @@ const Header = () => {
             <div className="search-dropdown">
               {filteredResults.length > 0 ? (
                 filteredResults.map((item, index) => (
-                  <div key={index} className="search-result">
+                  <div
+                    key={index}
+                    className="search-result"
+                    onClick={() => handleResultClick(item)}
+                  >
                     {item.title || item.name}
                   </div>
                 ))
@@ -84,4 +99,3 @@ const Header = () => {
 };
 
 export default Header;
- 

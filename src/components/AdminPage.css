@@ -1,12 +1,18 @@
+/* =========================
+   🌟 GENERAL LAYOUT
+========================= */
 .admin-page {
   min-height: 100vh;
   background: #121212;
   color: #f0f0f0;
   padding: 30px 50px;
   font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
 }
 
-/* ---------- Header ---------- */
+/* =========================
+   🌟 HEADER SECTION
+========================= */
 .admin-header {
   display: flex;
   justify-content: space-between;
@@ -15,12 +21,12 @@
   padding: 14px 24px;
   border-radius: 8px;
   box-shadow: 0 0 6px rgba(255, 255, 255, 0.08);
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .admin-header h2 {
   color: #03dac6;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   margin: 0;
 }
 
@@ -28,7 +34,7 @@
   background-color: #e53935;
   color: white;
   border: none;
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
@@ -39,12 +45,59 @@
   background-color: #b71c1c;
 }
 
-/* ---------- Category Dropdown ---------- */
+/* =========================
+   🌟 GRID STRUCTURE
+========================= */
+.admin-grid {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  gap: 25px;
+  margin-top: 20px;
+}
+
+/* LEFT PANEL */
+.left-panel {
+  background: #181818;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* RIGHT PANEL */
+.right-panel {
+  background: #202020;
+  border-radius: 8px;
+  padding: 20px;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Scrollbar customization */
+.right-panel::-webkit-scrollbar {
+  width: 8px;
+}
+.right-panel::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+.right-panel::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* =========================
+   🌟 CATEGORY DROPDOWN SECTION
+========================= */
 .admin-category {
   background: #1e1e1e;
   padding: 12px 18px;
   border-radius: 8px;
-  margin-bottom: 20px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -53,9 +106,11 @@
 
 .admin-category label {
   font-weight: 500;
+  color: #b0b0b0;
 }
 
 .category-dropdown {
+  flex: 1;
   padding: 7px 10px;
   border-radius: 5px;
   border: none;
@@ -65,34 +120,52 @@
   cursor: pointer;
 }
 
-/* ---------- Form Section ---------- */
+.category-dropdown:hover {
+  background-color: #333;
+}
+
+/* =========================
+   🌟 FORM SECTION
+========================= */
 .admin-form {
   background: #181818;
-  padding: 20px 25px;
+  padding: 20px 25px 60px;
   border-radius: 8px;
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
-  gap: 10px; /* reduced from 15px */
+  gap: 10px;
   max-width: 600px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .admin-form h3 {
   color: #03dac6;
   text-align: center;
   font-size: 1.2rem;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
+.admin-form h4 {
+  color: #ccc;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-size: 1rem;
+}
+
+/* =========================
+   🌟 INPUTS
+========================= */
 .admin-form input[type="text"],
-.admin-form input[type="file"] {
+.admin-form input[type="file"],
+.admin-form select {
   background: #2b2b2b;
   border: 1px solid #333;
   color: white;
   padding: 8px 10px;
   border-radius: 5px;
   outline: none;
+  font-size: 0.9rem;
   transition: border 0.2s ease;
 }
 
@@ -100,11 +173,13 @@
   border: 1px solid #03dac6;
 }
 
-/* ---------- Add Song Button ---------- */
+/* =========================
+   🌟 BUTTONS
+========================= */
 .add-song-btn {
   background: #00796b;
   border: none;
-  padding: 8px 12px;
+  padding: 10px;
   color: white;
   border-radius: 6px;
   cursor: pointer;
@@ -117,33 +192,22 @@
   transform: translateY(-1px);
 }
 
-/* ---------- Song List ---------- */
-.song-list-preview {
-  list-style: none;
-  padding: 0;
-  margin: 5px 0;
-}
-
-.song-list-preview li {
-  padding: 6px 8px;
-  background: #242424;
-  border-radius: 5px;
-  margin-top: 4px; /* reduced gap */
-  border-left: 3px solid #03dac6;
-  font-size: 0.9rem;
-}
-
-/* ---------- Submit Button ---------- */
+/* Sticky submit button visible always */
 .submit-btn {
+  position: sticky;
+  bottom: 10px;
   background: #388e3c;
   border: none;
-  padding: 10px;
+  padding: 12px;
   color: white;
   border-radius: 6px;
   font-size: 0.95rem;
   cursor: pointer;
   font-weight: 600;
+  width: 100%;
+  margin-top: 10px;
   transition: background 0.3s ease, transform 0.2s ease;
+  z-index: 10;
 }
 
 .submit-btn:hover {
@@ -151,8 +215,46 @@
   transform: translateY(-1px);
 }
 
-/* ---------- Responsive ---------- */
-@media (max-width: 768px) {
+/* =========================
+   🌟 SONG LIST PREVIEW
+========================= */
+.song-list-preview {
+  list-style: none;
+  padding: 0;
+  margin: 5px 0;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.song-list-preview li {
+  padding: 6px 8px;
+  background: #242424;
+  border-radius: 5px;
+  margin-top: 4px;
+  border-left: 3px solid #03dac6;
+  font-size: 0.9rem;
+}
+
+/* Scrollbar for song preview */
+.song-list-preview::-webkit-scrollbar {
+  width: 6px;
+}
+.song-list-preview::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+.song-list-preview::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+/* =========================
+   🌟 RESPONSIVE DESIGN
+========================= */
+@media (max-width: 900px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
   .admin-page {
     padding: 20px;
   }
@@ -163,22 +265,7 @@
     text-align: center;
   }
 
-  .admin-form {
-    width: 100%;
-    padding: 18px;
+  .right-panel {
+    max-height: unset;
   }
-}
-.submit-btn {
-  position: sticky; /* ✅ makes it fixed within the form */
-  bottom: 0;
-  align-self: flex-end;
-  background: #388e3c;
-  border: none;
-  padding: 10px 18px;
-  color: white;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background 0.3s ease, transform 0.2s ease;
 }
