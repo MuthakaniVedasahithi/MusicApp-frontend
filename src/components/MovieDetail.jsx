@@ -1,114 +1,219 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { movies } from "./Movies";
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { FaArrowLeft, FaHeart, FaPlay, FaPause, FaPlus } from "react-icons/fa";
+import axios from "axios";
 import "./MovieDetail.css";
 
 const MovieDetail = () => {
-  const { category, movieId } = useParams();
-  const movie = movies[category]?.find((m) => m.id === parseInt(movieId));
-  const [likedSongs, setLikedSongs] = useState({});
-  const [playingSong, setPlayingSong] = useState(null);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [movie, setMovie] = useState(null);
+  const [selectedSong, setSelectedSong] = useState(null);
+  const [likedSongs, setLikedSongs] = useState([]);
+  const [playing, setPlaying] = useState(false);
+  const [playlists, setPlaylists] = useState({});
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const audioRef = useRef(null);
 
-  if (!movie) return <p>Movie not found.</p>;
+  useEffect(() => {
+    axios
+      .get(`http://localhost:7076/admin/movie/${id}`)
+      .then((res) => {
+        setMovie(res.data);
+      })
+      .catch((err) => console.error("Error fetching movie details:", err));
+  }, [id]);
 
-  // ✅ Handle Like/Unlike
-  const toggleHeart = (idx) => {
-    const song = movie.songs[idx];
-    const likedSongsList = JSON.parse(localStorage.getItem("likedSongs")) || [];
+  useEffect(() => {
+    const storedPlaylists = JSON.parse(localStorage.getItem("playlists")) || {};
+    const storedLikedSongs = JSON.parse(localStorage.getItem("likedSongs")) || [];
+    setPlaylists(storedPlaylists);
+    setLikedSongs(storedLikedSongs.map((s) => s.title));
+  }, []);
 
-    const isAlreadyLiked = likedSongsList.some(
-      (s) => s.title === song.title && s.artist === song.singer
+  if (!movie)
+    return <p style={{ color: "white" }}>Loading movie details...</p>;
+
+  const toggleLike = (song) => {
+    const likedList = JSON.parse(localStorage.getItem("likedSongs")) || [];
+    const exists = likedList.some(
+      (s) => s.title === song.title && s.artist === movie.title
     );
 
-    let updatedLikedSongs;
-    if (isAlreadyLiked) {
-      // remove if already liked
-      updatedLikedSongs = likedSongsList.filter(
-        (s) => !(s.title === song.title && s.artist === song.singer)
+    if (exists) {
+      const updated = likedList.filter(
+        (s) => !(s.title === song.title && s.artist === movie.title)
       );
+      localStorage.setItem("likedSongs", JSON.stringify(updated));
+      setLikedSongs((prev) => prev.filter((t) => t !== song.title));
     } else {
-      // add if not liked
-      updatedLikedSongs = [
-        ...likedSongsList,
-        {
-          id: Date.now(), // unique id
-          title: song.title,
-          artist: song.singer,
-          img: movie.img,
-        },
-      ];
+      const imgSrc = movie.imageBase64
+        ? `data:image/jpeg;base64,${movie.imageBase64}`
+        : "/default-movie.png";
+
+      const newLikedSong = {
+        id: Date.now(),
+        title: song.title,
+        artist: movie.title,
+        img: imgSrc,
+        type: song.type || "mp3",
+      };
+
+      likedList.push(newLikedSong);
+      localStorage.setItem("likedSongs", JSON.stringify(likedList));
+      setLikedSongs((prev) => [...prev, song.title]);
     }
-
-    localStorage.setItem("likedSongs", JSON.stringify(updatedLikedSongs));
-
-    setLikedSongs((prev) => ({
-      ...prev,
-      [idx]: !prev[idx],
-    }));
   };
 
-  // ✅ Keep liked hearts active when revisiting
-  useEffect(() => {
-    const likedSongsFromStorage = JSON.parse(localStorage.getItem("likedSongs")) || [];
-    const likedState = {};
-    movie.songs.forEach((song, idx) => {
-      likedState[idx] = likedSongsFromStorage.some(
-        (s) => s.title === song.title && s.artist === song.singer
-      );
-    });
-    setLikedSongs(likedState);
-  }, [movie]);
+  // ⭐ ONLY FIX ADDED — everything else untouched
+  const handlePlay = (song) => {
+    // If same song AND it is playing → pause it
+    if (selectedSong?.title === song.title && playing) {
+      audioRef.current.pause();
+      setPlaying(false);
+      return;
+    }
 
-  // ✅ Play/Pause toggle
-  const togglePlay = (idx) => {
-    setPlayingSong((prev) => (prev === idx ? null : idx));
+    // If same song BUT paused → resume it
+    if (selectedSong?.title === song.title && !playing) {
+      audioRef.current.play();
+      setPlaying(true);
+      return;
+    }
+
+    // Clicking a different song → switch song (your original logic)
+    setSelectedSong(song);
+    setPlaying(true);
+  };
+
+  const handleAddToPlaylist = (playlistName, song) => {
+    const updated = { ...playlists };
+    if (!updated[playlistName]) updated[playlistName] = [];
+
+    const normalize = (str) =>
+      (str || "").trim().toLowerCase().replace(/\s+/g, " ");
+
+    const songKey = `${normalize(movie.title)}-${normalize(song.title)}`;
+
+    if (
+      updated[playlistName].some(
+        (s) =>
+          s.uniqueId === songKey ||
+          (normalize(s.artist) === normalize(movie.title) &&
+            normalize(s.title) === normalize(song.title))
+      )
+    ) {
+      alert(`⚠️ "${song.title}" already exists in "${playlistName}"`);
+      setActiveDropdown(null);
+      return;
+    }
+
+    const imgSrc = movie.imageBase64
+      ? `data:image/jpeg;base64,${movie.imageBase64}`
+      : "/default-movie.png";
+
+    const newSong = {
+      id: Date.now(),
+      title: song.title,
+      artist: movie.title,
+      uniqueId: songKey,
+      img: imgSrc,
+      type: song.type || "mp3",
+    };
+
+    updated[playlistName].push(newSong);
+    localStorage.setItem("playlists", JSON.stringify(updated));
+    setPlaylists(updated);
+    setActiveDropdown(null);
   };
 
   return (
     <div className="movie-detail-container">
-      {/* Movie Banner */}
-      <div
-        className="movie-banner"
-        style={{
-          backgroundImage: `url(${movie.img})`,
-        }}
-      >
-        <div className="banner-overlay">
-          <h1 className="movie-title-detail">{movie.title}</h1>
-          <p className="movie-director-detail">Director: {movie.director}</p>
+      <div className="movie-header">
+        <button onClick={() => navigate("/movies")} className="back-btn">
+          <FaArrowLeft /> Back
+        </button>
+        <h2>{movie.title}</h2>
+      </div>
+
+      <div className="movie-banner">
+        <img
+          src={
+            movie.imageBase64
+              ? `data:image/jpeg;base64,${movie.imageBase64}`
+              : "/default-movie.png"
+          }
+          className="movie-image"
+          alt={movie.title}
+        />
+
+        <div className="movie-banner-text">
+          <h2>{movie.title}</h2>
+          <h3>Directed by: {movie.director}</h3>
         </div>
       </div>
 
-      {/* Songs List */}
-      <div className="songs-list-container">
-        {movie.songs.length > 0 ? (
-          movie.songs.map((song, idx) => (
-            <div key={idx} className="song-row">
+      <div className="movie-songs-list">
+        <h3>Songs from {movie.title}</h3>
+
+        {movie.songs?.length > 0 ? (
+          movie.songs.map((song, index) => (
+            <div key={index} className="song-row">
               <div className="song-info">
-                <span className="song-title">{song.title}</span>
+                <span className="song-title">🎵 {song.title}</span>
                 <span className="song-singer">- {song.singer}</span>
               </div>
 
               <div className="song-actions">
-                <span className="song-duration">{song.duration}</span>
-
-                {/* ▶ / ⏸ button */}
                 <button
-                  className={`play ${playingSong === idx ? "active" : ""}`}
-                  onClick={() => togglePlay(idx)}
+                  className={`heart ${
+                    likedSongs.includes(song.title) ? "active" : ""
+                  }`}
+                  onClick={() => toggleLike(song)}
                 >
-                  {playingSong === idx ? "⏸" : "▶"}
+                  <FaHeart />
                 </button>
 
-                {/* ❤️ Like button */}
                 <button
-                  className={`heart ${likedSongs[idx] ? "active" : ""}`}
-                  onClick={() => toggleHeart(idx)}
+                  className={`play ${
+                    selectedSong?.title === song.title && playing ? "active" : ""
+                  }`}
+                  onClick={() => handlePlay(song)}
                 >
-                  ♥
+                  {selectedSong?.title === song.title && playing ? (
+                    <FaPause />
+                  ) : (
+                    <FaPlay />
+                  )}
                 </button>
 
-                <button className="add">＋</button>
+                <div className="dropdown-container">
+                  <button
+                    className="add"
+                    onClick={() =>
+                      setActiveDropdown(activeDropdown === index ? null : index)
+                    }
+                  >
+                    <FaPlus />
+                  </button>
+
+                  {activeDropdown === index && (
+                    <div className="playlist-dropdown">
+                      {Object.keys(playlists).length === 0 ? (
+                        <p className="no-playlist">No playlists</p>
+                      ) : (
+                        Object.keys(playlists).map((name) => (
+                          <button
+                            key={name}
+                            onClick={() => handleAddToPlaylist(name, song)}
+                          >
+                            {name}
+                          </button>
+                        ))
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))
@@ -117,29 +222,25 @@ const MovieDetail = () => {
         )}
       </div>
 
-      {/* 🎵 Bottom Player */}
-      {playingSong !== null && (
-        <div className="bottom-player">
-          <div className="player-controls">
-            <span className="time">0:00</span>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value="0"
-              className="progress-bar"
-              readOnly
-            />
-            <span className="time">{movie.songs[playingSong].duration}</span>
-          </div>
+      {selectedSong && (
+        <div className="song-player">
+          <h4>Now Playing: 🎧 {selectedSong.title}</h4>
 
-          <div className="main-buttons">
-            <button>⏮</button>
-            <button className="play-big">
-              {playingSong !== null ? "⏸" : "▶"}
-            </button>
-            <button>⏭</button>
-          </div>
+          {/* ⭐ KEEPING YOUR KEY EXACTLY AS YOU WROTE IT */}
+          <audio
+            key={selectedSong.title}
+            ref={audioRef}
+            controls
+            autoPlay
+            onPause={() => setPlaying(false)}
+            onPlay={() => setPlaying(true)}
+          >
+            <source
+              src={`data:audio/${selectedSong.type};base64,${
+                selectedSong.dataBase64 || ""
+              }`}
+            />
+          </audio>
         </div>
       )}
     </div>

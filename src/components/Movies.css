@@ -1,129 +1,150 @@
-.movie-card {
+/* ==========================
+   MAIN MOVIES CONTAINER
+========================== */
+.movies-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: 10px;
-  padding: 10px;
-  background-color: #1e1e2f;
-  border-radius: 10px;
-  width: 180px;
-  text-align: center;
-  color: #fff;
-  transition: transform 0.2s ease-in-out;
+  gap: 25px;
+  padding: 20px 25px;
 }
 
-.movie-card:hover {
-  transform: scale(1.05);
+/* ==========================
+   CATEGORY SECTION
+========================== */
+.category-section {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 10px;
 }
 
-.movie-info {
-  margin-top: 5px;
-}
-
-.movie-title {
-  font-size: 14px;
-  font-weight: bold;
-  margin: 2px 0;
-}
-
-.movie-director {
-  font-size: 12px;
-  color: #aaa;
-  margin: 0;
-}
-
-/* Row view - horizontal scroll */
-.row-view {
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto;
-  padding: 0.5rem 0;
-  scrollbar-width: none;
-}
-
-.row-view::-webkit-scrollbar {
-  display: none;
-}
-
-/* Grid view - show all */
-.grid-view {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 2rem;
-}
-
-/* Movie category title */
-.movie-category-title {
-  margin: 0;
-  color: #fff;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* Section wrapper for each category */
-.movie-category-section {
-  margin-bottom: 30px;
-}
-
-/* Header for category + show all button */
+/* Title + Show All */
 .category-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
-/* Show all button */
-.toggle-link {
-  cursor: pointer;
-  font-weight: bold;
+.category-title {
+  font-size: 1.35rem;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  margin: 0;
 }
-/* Movie card container */
-.movie-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  width: 150px;
-  height:220px;
-  margin: 10px;
-  padding: 10px;
-  background-color: #1e1e2f;   /* dark background */
-  border-radius: 10px;
-  text-align: center;
-  color: #fff;
-  text-decoration: none;        /* remove link underline */
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+.showall-btn {
+  font-size: 0.9rem;
+  color: #bfbfbf;
   cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.showall-btn:hover {
+  color: #fff;
+}
+
+/* ==========================
+   ROW VIEW (Horizontal scrolling)
+========================== */
+.movie-grid {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: none;
+}
+
+.movie-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==========================
+   MOVIE CARD
+========================== */
+.movie-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  width: 150px;
+  padding: 10px;
+  flex-shrink: 0;
+  cursor: pointer;
+  text-align: center;
+
+  transition: transform 0.2s ease;
 }
 
 .movie-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transform: scale(1.03);
 }
 
-/* Poster image inside card */
-.movie-card .movie-poster {
+/* ==========================
+   POSTER IMAGE (BLACK OUTLINE)
+========================== */
+.movie-poster {
   width: 100%;
-  height: 250px;                /* fixed height for uniform cards */
-  object-fit: cover;            /* crop to fill */
+  height: 200px;
   border-radius: 8px;
+  object-fit: cover;
+
+  border: 2px solid rgba(0, 0, 0, 0.9);
 }
 
-/* Info section under poster */
-.movie-card .movie-info {
-  margin-top: 8px;
+/* ==========================
+   MOVIE INFO — BLACK TEXT
+========================== */
+.movie-info {
+  margin-top: 3px;
+  line-height: 1.1;
 }
 
-.movie-card .movie-title {
-  font-size: 14px;
-  font-weight: 700;
-  margin: 4px 0 2px;
-  color: #fff;
+.movie-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 2px;
+  margin-bottom: 1px;
+  
+  color: #000000; /* BLACK NAME */
 }
 
-.movie-card .movie-director {
-  font-size: 12px;
-  color: #aaa;
+.movie-director {
+  font-size: 0.85rem;
+  color: #333333; /* DARK BLACK-GREY FOR DIRECTOR */
   margin: 0;
+}
+
+.no-movies {
+  color: #aaa;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ==========================
+   GRID VIEW (Show All Mode)
+========================== */
+.grid-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 18px;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+@media (max-width: 768px) {
+  .movies-container {
+    padding: 12px 15px;
+  }
+
+  .movie-card {
+    width: 130px;
+  }
+
+  .movie-poster {
+    height: 170px;
+  }
+
+  .category-title {
+    font-size: 1.1rem;
+  }
 }
